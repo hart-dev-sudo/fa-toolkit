@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fapaay — FA trip pay calculator (beta)</title>
+<meta name="description" content="Unofficial AA flight attendant trip pay estimator. 2024 APFA CBA. Nothing you enter leaves your phone.">
+<style>
+  /* ── tokens ─────────────────────────────────────────────
+     chrome-gray  #d4d0c8   (win2k dialog gray)
+     chrome-dark  #808080
+     paper        #ffffff
+     ink          #1a1a1a
+     alert-red    #cc0000
+     term-black   #000000
+     ansi-cyan    #4dd8e6
+     ansi-yellow  #e6d84d
+     ansi-green   #4de64d
+     ansi-red     #e64d4d
+     ansi-white   #f2f2f2
+     ansi-dim     #9a9a9a
+     display type: Verdana (chrome) / body: Arial / terminal: monospace stack
+  ──────────────────────────────────────────────────────── */
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body {
+    background:#ffffff; color:#1a1a1a;
+    font-family:Arial, Helvetica, sans-serif; font-size:13px;
+  }
+  a { color:#0645ad; }
+
+  /* ── top corporate bar ── */
+  .topbar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; border-bottom:1px solid #cccccc;
+  }
+  .wordmark { font-family:Verdana, Geneva, sans-serif; }
+  .wordmark .fap { font-size:22px; font-weight:bold; letter-spacing:-1px; }
+  .wordmark .aa  { color:#cc0000; }
+  .wordmark .sub { display:block; font-size:10px; color:#808080; letter-spacing:2px; }
+  .topnav { font-size:12px; }
+  .topnav button {
+    background:none; border:none; font:inherit; color:#1a1a1a;
+    cursor:pointer; padding:4px 8px;
+  }
+  .topnav button:hover { text-decoration:underline; }
+  .topnav button:focus-visible { outline:2px solid #0645ad; }
+
+  /* ── layout ── */
+  .wrap {
+    display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start;
+    padding:20px 16px; max-width:1180px; margin:0 auto;
+  }
+  .term-col { flex:1 1 560px; min-width:0; }
+  .side-col { flex:0 1 320px; min-width:260px; }
+
+  /* ── terminal window chrome ── */
+  .term-frame { border:1px solid #4d4d4d; background:#d4d0c8; }
+  .term-titlebar {
+    display:flex; align-items:center; gap:4px;
+    padding:3px 6px; border-bottom:1px solid #808080;
+  }
+  .tb-btn {
+    width:26px; height:22px; background:#d4d0c8; cursor:pointer;
+    border:1px solid; border-color:#ffffff #5a5a5a #5a5a5a #ffffff;
+    font-size:12px; line-height:1;
+  }
+  .tb-btn:active { border-color:#5a5a5a #ffffff #ffffff #5a5a5a; }
+  .tb-btn:focus-visible { outline:2px solid #0645ad; }
+  .term-title {
+    margin-left:auto; font-family:Verdana, Geneva, sans-serif;
+    font-size:11px; font-weight:bold;
+  }
+  .term-screen {
+    background:#000000; color:#f2f2f2; height:460px;
+    overflow-y:auto; overflow-x:hidden;
+    scrollbar-color:#4d4d4d #000000;
+    padding:14px 12px 18px;
+    font-family:"Cascadia Mono", Consolas, Menlo, "DejaVu Sans Mono", monospace;
+    font-size:13px; line-height:1.55;
+  }
+  .term-statusbar {
+    display:flex; border-top:1px solid #808080;
+    font-family:Verdana, Geneva, sans-serif; font-size:10px;
+  }
+  .term-statusbar span { padding:3px 8px; border-right:1px solid #a0a0a0; }
+  .term-statusbar span:last-child { margin-left:auto; border-right:none; border-left:1px solid #a0a0a0; }
+
+  /* ── ANSI palette ── */
+  .cy  { color:#4dd8e6; }
+  .ye  { color:#e6d84d; }
+  .gr  { color:#4de64d; }
+  .rd  { color:#e64d4d; }
+  .wh  { color:#f2f2f2; }
+  .dim { color:#9a9a9a; }
+  .b   { font-weight:bold; }
+
+  .hrule { color:#4dd8e6; overflow:hidden; white-space:nowrap; }
+  .banner { color:#e6d84d; font-weight:bold; text-align:center; }
+
+  /* ── transcript blocks ── */
+  .step { margin-top:14px; }
+  .echo { color:#4de64d; }
+  .prompt-label { color:#f2f2f2; font-weight:bold; }
+
+  /* menu options rendered as tappable terminal lines */
+  .menu button {
+    display:block; width:100%; text-align:left;
+    background:none; border:none; color:#f2f2f2;
+    font:inherit; padding:6px 4px; cursor:pointer;
+  }
+  .menu button:hover, .menu button:focus-visible { background:#1c2b1c; outline:1px dotted #4de64d; }
+  .menu button .k { color:#e6d84d; }
+  .menu button .hint { color:#9a9a9a; }
+
+  /* inline text input row — bare terminal prompt */
+  .inrow { display:flex; align-items:baseline; padding:4px 0; }
+  .inrow::before { content:"\276F\00a0"; color:#4de64d; }
+  .term-input {
+    background:transparent; color:#4de64d; caret-color:#4de64d;
+    border:none; outline:none;
+    font:inherit; font-size:16px; padding:2px 4px; flex:1 1 auto; min-width:0;
+  }
+  .err { color:#e64d4d; }
+  .selline { color:#4de64d; }
+  .cursor { color:#4de64d; }
+  .ret {
+    background:none; border:none; color:#4de64d;
+    font:inherit; font-size:18px; padding:2px 10px; cursor:pointer;
+    flex:0 0 auto;
+  }
+  .ret:focus-visible { outline:1px dotted #4de64d; }
+
+  /* results */
+  .rline { display:flex; gap:8px; align-items:baseline; }
+  .rline .nm { flex:0 0 auto; }
+  .rline .dt { flex:1 1 auto; color:#9a9a9a; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+  .rline .amt { flex:0 0 auto; color:#f2f2f2; text-align:right; min-width:7.5em; }
+  .rtotal .amt { color:#4de64d; font-weight:bold; }
+  .again {
+    background:none; border:1px solid #4dd8e6; color:#4dd8e6;
+    font:inherit; padding:6px 12px; cursor:pointer; margin-top:12px;
+  }
+  .again:hover, .again:focus-visible { background:#0c2226; outline:none; }
+
+  /* ── sidebar ── */
+  .beta-note {
+    color:#cc0000; font-weight:bold; font-size:13px; line-height:1.5;
+    margin-bottom:14px;
+  }
+  .privacy-note { font-size:12px; line-height:1.5; margin-bottom:18px; }
+  table.ref {
+    border-collapse:collapse; width:100%; font-size:12px; margin-bottom:18px;
+  }
+  table.ref th, table.ref td {
+    border:1px solid #1a1a1a; padding:5px 7px; text-align:left; vertical-align:top;
+  }
+  table.ref th.hd { font-weight:bold; background:#f2f2f2; }
+  .ref .num { white-space:nowrap; }
+  .side-fine { font-size:11px; color:#555; line-height:1.5; }
+
+  footer {
+    max-width:1180px; margin:0 auto; padding:14px 16px 28px;
+    border-top:1px solid #cccccc; font-size:11px; color:#555;
+  }
+
+  @media (max-width:720px) {
+    .wrap { padding:12px 8px; gap:18px; }
+    .side-col { flex-basis:100%; min-width:0; }
+    .term-screen { font-size:12px; height:62vh; }
+    .rline .amt { min-width:6.5em; }
+  }
+  @media (prefers-reduced-motion:no-preference) {
+    .cursor { animation:blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity:0; } }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wordmark">
+    <span class="fap">fap<span class="aa">aa</span>y</span>
+    <span class="sub">FA PAY&nbsp;&nbsp;·&nbsp;&nbsp;UNOFFICIAL</span>
+  </div>
+  <nav class="topnav">
+    <button type="button" onclick="termSay(['Estimates the pay for one trip under the 2024 APFA CBA.','Everything runs on your phone. Nothing is sent or saved.'])">About</button>
+    <button type="button" onclick="termSay(['You were never logged in.','Nothing you entered was saved.','There is nothing to log out of.'])">Log Out</button>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <!-- ══ terminal column ══ -->
+  <div class="term-col">
+    <div class="term-frame">
+      <div class="term-titlebar">
+        <button class="tb-btn" type="button" title="Print — or, realistically, screenshot it" onclick="termSay(['Screenshot it. You know you were going to anyway.'])">&#128424;</button>
+        <button class="tb-btn" type="button" title="Start over" onclick="restart()">&#8635;</button>
+        <button class="tb-btn" type="button" title="Help" onclick="termSay(['Type your numbers, tap the menu lines \u2014 or just type 1/2/3 and y/n.','Enter takes the default when one is shown.','q is not required. This is the future.'])">?</button>
+        <span class="term-title" id="termTitle">fapaay beta v2.0</span>
+      </div>
+
+      <div class="term-screen" id="screen" aria-live="polite"></div>
+
+      <div class="term-statusbar">
+        <span id="statusStep">READY</span>
+        <span id="statusRates"></span>
+        <span>Ln 1, Col 1</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ sidebar column ══ -->
+  <div class="side-col">
+    <p class="beta-note">fapaay is currently a BETA version with limited functionality. Additional features will be added over the next several weeks.</p>
+    <p class="privacy-note"><b>Nothing you enter leaves your phone.</b> No account, no login, no cookies, no saved data. Close the tab and it's gone — screenshot anything you want to keep.</p>
+
+    <table class="ref">
+      <tr><th class="hd" colspan="2">Boarding times &nbsp;(Section 11.M)</th></tr>
+      <tr><th>Flight</th><th>Per leg</th></tr>
+      <tr><td>IPD — any aircraft</td><td class="num">50 min</td></tr>
+      <tr><td>NIPD — any aircraft</td><td class="num">45 min</td></tr>
+      <tr><td>DOM 161+ seats (all 738/MAX8, A321-family, widebody)</td><td class="num">40 min</td></tr>
+      <tr><td>DOM &lt;161 seats (A319/A320 — rare on domestic)</td><td class="num">35 min</td></tr>
+    </table>
+
+    <table class="ref">
+      <tr><th class="hd" colspan="2">Current rates <span id="refPeriod"></span></th></tr>
+      <tr><td>Per diem — domestic</td><td class="num" id="refPdDom"></td></tr>
+      <tr><td>Per diem — international</td><td class="num" id="refPdIntl"></td></tr>
+      <tr><td>NIPD override</td><td class="num">$3.00/hr</td></tr>
+      <tr><td>IPD override</td><td class="num">$3.75/hr</td></tr>
+      <tr><td>Boarding pay rate</td><td class="num">50% hourly</td></tr>
+      <tr><td>Trip rig floor</td><td class="num">TAFB ÷ 3.5</td></tr>
+      <tr><td>Sit rig</td><td class="num">&gt;2:30 · 50%</td></tr>
+    </table>
+
+    <p class="side-fine">Estimates only, based on publicly available 2024 APFA CBA data. Not an AA or APFA product. Verify against your pay statement; report discrepancies through official channels. For anything official — reference the CBA. For everything else — BATMAN.</p>
+  </div>
+</div>
+
+<footer>
+  fapaay.com &nbsp;·&nbsp; built layover by layover &nbsp;·&nbsp; per diem is tax-free — your taxable total is lower
+</footer>
+
+<script>
+"use strict";
+/* ════════════════════════════════════════════════════════
+   MATH — line-for-line port of fa_pay_calculator.py v1.1.1
+   ════════════════════════════════════════════════════════ */
+const PAY_SCALE_BASE = {
+  1:35.82, 2:37.97, 3:40.40, 4:43.03, 5:47.39,
+  6:53.67, 7:59.21, 8:61.11, 9:62.80, 10:65.15,
+  11:66.94, 12:70.12, 13:82.24
+};
+const CBA_DATES = [
+  { d:[2024,10,1], m:1.0 },
+  { d:[2025,10,1], m:1.0275 },
+  { d:[2026,10,1], m:1.0275*1.03 },
+  { d:[2027,10,1], m:1.0275*1.03*1.03 },
+  { d:[2028,10,1], m:1.0275*1.03*1.03*1.035 }
+];
+const PER_DIEM_RATES = [
+  { d:[2024,10,1], dom:2.85, intl:3.40 },
+  { d:[2025,10,1], dom:2.90, intl:3.45 },
+  { d:[2026,10,1], dom:2.95, intl:3.50 },
+  { d:[2027,10,1], dom:3.00, intl:3.55 },
+  { d:[2028,10,1], dom:3.05, intl:3.60 }
+];
+const INTL_OVERRIDE = { nipd:3.00, ipd:3.75 };
+const BOARDING = { nb_small:35, nb_large:40, widebody:40, nipd:45, ipd:50 };
+
+function onOrAfter(today, ymd) {
+  const t = new Date(ymd[0], ymd[1]-1, ymd[2]);
+  return today >= t;
+}
+function currentCBA() {
+  const today = new Date();
+  let cur = CBA_DATES[0];
+  for (const e of CBA_DATES) if (onOrAfter(today, e.d)) cur = e;
+  const lbl = new Date(cur.d[0], cur.d[1]-1, cur.d[2])
+    .toLocaleDateString("en-US", { month:"long", day:"numeric", year:"numeric" });
+  return { mult:cur.m, label:lbl };
+}
+function currentPerDiem() {
+  const today = new Date();
+  let cur = PER_DIEM_RATES[0];
+  for (const e of PER_DIEM_RATES) if (onOrAfter(today, e.d)) cur = e;
+  return cur;
+}
+function rateForYOS(yos) {
+  const { mult } = currentCBA();
+  const yr = Math.min(Math.max(Math.trunc(yos), 1), 13);
+  return Math.round(PAY_SCALE_BASE[yr] * mult * 100) / 100;
+}
+function parseTime(raw) {  // HH:MM or decimal → float hours, or null
+  raw = raw.trim();
+  if (!raw) return null;
+  if (raw.includes(":")) {
+    const p = raw.split(":");
+    if (p.length !== 2) return null;
+    const h = parseInt(p[0], 10), m = parseInt(p[1], 10);
+    if (Number.isNaN(h) || Number.isNaN(m)) return null;
+    return h + m / 60;
+  }
+  const v = parseFloat(raw);
+  return Number.isNaN(v) ? null : v;
+}
+function usd(v) {
+  return "$" + v.toLocaleString("en-US", { minimumFractionDigits:2, maximumFractionDigits:2 });
+}
+function ord(n) { return n===1?"st":n===2?"nd":n===3?"rd":"th"; }
+function esc(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+/* ════════════════════════════════════════════════════════
+   TRANSCRIPT UI
+   ════════════════════════════════════════════════════════ */
+const screen = document.getElementById("screen");
+const statusStep = document.getElementById("statusStep");
+const HR = "═".repeat(80);
+const trip = {};  // rate, credit, tafb, legs, route, boardMin, tripRig, sitExcess, position
+
+function put(html) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  screen.appendChild(div);
+  return div;
+}
+function step(html) {
+  const div = put(html);
+  div.classList.add("step");
+  screen.scrollTop = screen.scrollHeight;
+  return div;
+}
+function setStatus(t) { statusStep.textContent = t; }
+
+function inputStep(labelHtml, hint, onSubmit, opts = {}) {
+  const div = step(
+    `<div class="prompt-label">${labelHtml}</div>` +
+    (hint ? `<div class="dim">${hint} <span class="gr">\u2014 press \u23CE</span></div>` : "") +
+    `<div class="inrow"><input class="term-input" type="text" enterkeyhint="go" inputmode="${opts.inputmode||"decimal"}"` +
+    (opts.placeholder ? ` placeholder="${opts.placeholder}"` : "") +
+    `>` +
+    (opts.colon ? `<button class="ret" type="button" aria-label="Insert colon">:</button>` : "") +
+    `<button class="ret js-ret" type="button" aria-label="Enter">\u23CE</button></div>` +
+    `<div class="err" hidden></div>`
+  );
+  const inp = div.querySelector("input");
+  const err = div.querySelector(".err");
+  let settled = false;
+  const fire = (refocusOnError) => {
+    if (settled) return;
+    const res = onSubmit(inp.value);
+    if (res === true) {
+      settled = true;
+      div.remove();
+    } else {
+      err.textContent = "[!] " + res;
+      err.hidden = false;
+      if (refocusOnError) inp.focus();
+    }
+  };
+  div.querySelector(".js-ret").addEventListener("pointerdown", e => {
+    e.preventDefault();           // keep focus state simple; no blur race
+    fire(true);
+  });
+  if (opts.colon) {
+    div.querySelector('[aria-label="Insert colon"]').addEventListener("pointerdown", e => {
+      e.preventDefault();         // don't steal focus — keyboard stays up
+      const s = inp.selectionStart ?? inp.value.length;
+      const t = inp.selectionEnd ?? s;
+      inp.setRangeText(":", s, t, "end");
+      inp.focus({ preventScroll:true });
+    });
+  }
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") fire(true); });
+  inp.addEventListener("blur", () => {
+    if (inp.value.trim() !== "") fire(false);   // iOS ✓/Done submits a valid value
+  });
+  inp.focus({ preventScroll:true });
+  return div;
+}
+
+let activeMenu = null;
+document.addEventListener("keydown", e => {
+  if (!activeMenu) return;
+  if (e.target && e.target.tagName === "INPUT") return;
+  const k = e.key === "Enter" && activeMenu.def
+    ? String(activeMenu.def).toLowerCase()
+    : e.key.toLowerCase();
+  const opt = activeMenu.opts.find(o => String(o.k).toLowerCase() === k);
+  if (opt) {
+    const d = activeMenu.div;
+    activeMenu = null;
+    d.remove();
+    opt.pick();
+  }
+});
+
+function menuStep(labelHtml, options, defaultKey) {
+  // options: [{k, text, hint, pick}] — tap a line, type the key, or Enter for the default
+  const keys = options.map(o =>
+    String(o.k) === String(defaultKey) ? String(o.k).toUpperCase() : String(o.k)
+  ).join("/");
+  const defNote = defaultKey !== undefined ? ` <span class="gr">[\u23CE = ${defaultKey}]</span>` : "";
+  const div = step(
+    `<div class="prompt-label">${labelHtml}</div><div class="menu"></div>` +
+    `<div class="selline">Select (${keys})${defNote} \u2192 <span class="cursor">\u2588</span></div>`
+  );
+  const menu = div.querySelector(".menu");
+  options.forEach(o => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.innerHTML = `<span class="k">${o.k}.</span> ${o.text}` +
+                  (o.hint ? ` <span class="hint">${o.hint}</span>` : "");
+    b.addEventListener("click", () => { activeMenu = null; div.remove(); o.pick(); });
+    menu.appendChild(b);
+  });
+  activeMenu = { div, opts: options, def: defaultKey };
+  return div;
+}
+
+function echo(text) { put(`<div class="echo">   → ${esc(text)}</div>`); }
+function termSay(lines) {
+  put(lines.map(l => `<div class="dim">** ${esc(l)}</div>`).join(""));
+  screen.scrollTop = screen.scrollHeight;
+}
+
+/* ── flow ─────────────────────────────────────────────── */
+function boot() {
+  const { label } = currentCBA();
+  const pd = currentPerDiem();
+  document.getElementById("statusRates").textContent = "Rates: " + label;
+  document.getElementById("refPeriod").textContent = "(" + label + ")";
+  document.getElementById("refPdDom").textContent = "$" + pd.dom.toFixed(2) + "/hr";
+  document.getElementById("refPdIntl").textContent = "$" + pd.intl.toFixed(2) + "/hr";
+
+  put(`<div class="dim">"We'd like to share a limited-time inflight offer with you today..."</div>`);
+  put(`<div class="hrule">${HR}</div>`);
+  put(`<div class="banner">FA TRIP PAY CALCULATOR</div>`);
+  put(`<div class="hrule">${HR}</div>`);
+  put(`<div class="gr">   2024 APFA CBA &nbsp;|&nbsp; Active rates: ${esc(label)}</div>`);
+  put(`<div class="dim">   Estimates one trip. Nothing is saved. Screenshot to keep.</div>`);
+  stepRate();
+}
+
+function payScaleTable() {
+  const today = new Date();
+  let curIdx = 0;
+  CBA_DATES.forEach((e, i) => { if (onOrAfter(today, e.d)) curIdx = i; });
+  const cols = CBA_DATES.map(e =>
+    new Date(e.d[0], e.d[1]-1, e.d[2]).toLocaleDateString("en-US", { month:"2-digit", day:"2-digit", year:"2-digit" })
+  );
+  let h = `<div class="dim">${"─".repeat(78)}</div>`;
+  h += `<div class="ye">  2024 APFA PAY SCALE</div>`;
+  h += `<div class="dim">${"─".repeat(78)}</div>`;
+  h += `<div class="wh">  ${"Year".padEnd(9)}` + cols.map(c => c.padStart(10)).join("") + `</div>`;
+  h += `<div class="dim">${"─".repeat(78)}</div>`;
+  for (let yr = 1; yr <= 13; yr++) {
+    const label = `${yr}${ord(yr)} Year`.padEnd(9);
+    const cells = CBA_DATES.map((e, i) => {
+      const r = Math.round(PAY_SCALE_BASE[yr] * e.m * 100) / 100;
+      const cell = usd(r).padStart(10);
+      return i === curIdx ? `<span class="gr b">${cell}</span>` : cell;
+    }).join("");
+    h += `<div class="wh">  ${label}${cells}</div>`;
+  }
+  h += `<div class="dim">${"─".repeat(78)}</div>`;
+  h += `<div class="dim">  Lineholder guarantee: 71 hrs/month  |  Reserve: 75 hrs/month</div>`;
+  const { label: curLbl } = currentCBA();
+  h += `<div class="gr">  Active rate period: ${esc(curLbl)}</div>`;
+  put(h);
+  screen.scrollTop = screen.scrollHeight;
+}
+
+function perDiemTable() {
+  const today = new Date();
+  let curIdx = 0;
+  PER_DIEM_RATES.forEach((e, i) => { if (onOrAfter(today, e.d)) curIdx = i; });
+  let h = `<div class="dim">${"─".repeat(58)}</div>`;
+  h += `<div class="ye">  PER DIEM RATES</div>`;
+  h += `<div class="dim">${"─".repeat(58)}</div>`;
+  h += `<div class="wh">  ${"Effective".padEnd(16)}${"Domestic".padStart(12)}${"International".padStart(16)}</div>`;
+  h += `<div class="dim">${"─".repeat(58)}</div>`;
+  PER_DIEM_RATES.forEach((e, i) => {
+    const lbl = new Date(e.d[0], e.d[1]-1, e.d[2]).toLocaleDateString("en-US", { month:"long", day:"numeric", year:"numeric" });
+    const row = `  ${lbl.padEnd(16)}${usd(e.dom).padStart(12)}${usd(e.intl).padStart(16)}`;
+    h += i === curIdx ? `<div class="gr b">${row}  ← current</div>` : `<div class="wh">${row}</div>`;
+  });
+  h += `<div class="dim">${"─".repeat(58)}</div>`;
+  h += `<div class="cy">  Per diem is tax-free</div>`;
+  put(h);
+  screen.scrollTop = screen.scrollHeight;
+}
+
+function stepRate() {
+  setStatus("STEP 1 — RATE");
+  inputStep(
+    "STEP 1 — YOUR PAY RATE",
+    "Year (1–13) or hourly rate. Blank = pay scale, \u201cpd\u201d = per diem rates.",
+    raw => {
+      const t = raw.trim().toLowerCase();
+      if (t === "") {
+        payScaleTable();
+        stepRateYear();
+        return true;
+      }
+      if (t === "pd") {
+        perDiemTable();
+        stepRate();
+        return true;
+      }
+      const v = parseFloat(t);
+      if (Number.isNaN(v) || v <= 0) return "Enter a year 1–13, an hourly rate, or \"pd\" for per diem rates";
+      if (Number.isInteger(v) && v >= 1 && v <= 13) {
+        trip.rate = rateForYOS(v);
+        const { label } = currentCBA();
+        echo(`${usd(trip.rate)}/hr  (${v}${ord(v)} year @ ${label})`);
+      } else {
+        trip.rate = Math.round(v * 100) / 100;
+        echo(`Using ${usd(trip.rate)}/hr`);
+      }
+      stepCredit();
+      return true;
+    }
+  );
+}
+
+function stepRateYear() {
+  inputStep("&nbsp;", "Enter your year of service (1–13)",
+    raw => {
+      const v = parseInt(raw.trim(), 10);
+      if (Number.isNaN(v) || v < 1 || v > 13 || String(v) !== raw.trim())
+        return "Enter a whole number 1–13";
+      trip.rate = rateForYOS(v);
+      const { label } = currentCBA();
+      echo(`${usd(trip.rate)}/hr  (${v}${ord(v)} year @ ${label})`);
+      stepCredit();
+      return true;
+    },
+    { inputmode:"numeric" }
+  );
+}
+
+function stepCredit() {
+  setStatus("STEP 2 — TRIP");
+  inputStep("STEP 2 — TRIP DETAILS", "Credit hours — HH:MM or decimal (e.g. 18:04 or 18.07)",
+    raw => {
+      const v = parseTime(raw);
+      if (v === null || v < 0) return "Use HH:MM or decimal (e.g. 18:04 or 18.07)";
+      trip.credit = v;
+      echo(`Credit: ${v.toFixed(2)} hrs`);
+      stepTafb();
+      return true;
+    },
+    { colon:true }
+  );
+}
+function stepTafb() {
+  inputStep("&nbsp;", "TAFB hours — HH:MM or decimal (e.g. 55:54 or 55.90)",
+    raw => {
+      const v = parseTime(raw);
+      if (v === null || v < 0) return "Use HH:MM or decimal (e.g. 55:54 or 55.90)";
+      trip.tafb = v;
+      echo(`TAFB: ${v.toFixed(2)} hrs`);
+      stepLegs();
+      return true;
+    },
+    { colon:true }
+  );
+}
+function stepLegs() {
+  inputStep("&nbsp;", "Number of legs (Enter for 4)",
+    raw => {
+      const t = raw.trim();
+      const v = t === "" ? 4 : Number(t);
+      if (!Number.isInteger(v) || v < 1) return "Enter a whole number ≥ 1";
+      trip.legs = v;
+      echo(`Legs: ${v}`);
+      stepRoute();
+      return true;
+    },
+    { inputmode:"numeric", placeholder:"4" }
+  );
+}
+
+function stepRoute() {
+  setStatus("STEP 3 — ROUTE");
+  menuStep("STEP 3 — ROUTE TYPE", [
+    { k:1, text:"Domestic", pick:() => { trip.route = "domestic"; echo("Domestic"); stepAircraft(); } },
+    { k:2, text:"NIPD", hint:"(+$3.00/hr override)", pick:() => { trip.route = "nipd"; echo("NIPD"); stepBoardOverride(BOARDING.nipd); } },
+    { k:3, text:"IPD", hint:"(+$3.75/hr override)", pick:() => { trip.route = "ipd"; echo("IPD"); stepBoardOverride(BOARDING.ipd); } }
+  ]);
+}
+
+function stepAircraft() {
+  setStatus("STEP 4 — BOARDING");
+  menuStep("STEP 4 — AIRCRAFT &nbsp;<span class='dim'>(CBA 11.M trigger is SEAT COUNT, not tail)</span>", [
+    { k:1, text:"161+ seats", hint:"(B737-800/MAX8, A321/A321T/XLR) — 40 min", pick:() => { echo("161+ seats — 40 min"); stepBoardOverride(BOARDING.nb_large); } },
+    { k:2, text:"Widebody", hint:"(B777, B787) — 40 min", pick:() => { echo("Widebody — 40 min"); stepBoardOverride(BOARDING.widebody); } },
+    { k:3, text:"&lt;161 seats", hint:"(A319/A320) — 35 min", pick:() => { echo("<161 seats (A319/A320) — 35 min"); stepBoardOverride(BOARDING.nb_small); } }
+  ], 1);
+}
+
+function stepBoardOverride(def) {
+  inputStep("&nbsp;", `Boarding minutes per leg (Enter for ${def})`,
+    raw => {
+      const t = raw.trim();
+      const v = t === "" ? def : parseInt(t, 10);
+      if (Number.isNaN(v) || v < 1) return "Enter minutes ≥ 1";
+      trip.boardMin = v;
+      echo(`Boarding: ${v} min/leg`);
+      stepTripRig();
+      return true;
+    },
+    { inputmode:"numeric", placeholder:String(def) }
+  );
+}
+
+function stepTripRig() {
+  setStatus("STEP 5 — RIGS");
+  menuStep("STEP 5 — RIGS &amp; EXTRAS &nbsp;<span class='dim'>Trip rig? 1:3.5 TAFB — Section 11.D.4</span>", [
+    { k:"y", text:"Yes — apply trip rig", pick:() => { trip.tripRig = true; echo("Trip rig: yes"); stepSitRig(); } },
+    { k:"n", text:"No", pick:() => { trip.tripRig = false; echo("Trip rig: no"); stepSitRig(); } }
+  ], "n");
+}
+function stepSitRig() {
+  menuStep("Sit rig? &nbsp;<span class='dim'>&gt;2:30 between flights — Section 11.D.6</span>", [
+    { k:"y", text:"Yes — I had a long stopover", pick:() => stepSitExcess() },
+    { k:"n", text:"No", pick:() => { trip.sitExcess = 0; echo("Sit rig: no"); stepPosition(); } }
+  ], "n");
+}
+function stepSitExcess() {
+  inputStep("&nbsp;", "Sit time ABOVE the 2:30 threshold — HH:MM or decimal (if actual sit = 4:00, enter 1:30)",
+    raw => {
+      const v = parseTime(raw);
+      if (v === null || v < 0) return "Use HH:MM or decimal";
+      trip.sitExcess = v;
+      echo(`Sit excess: ${v.toFixed(2)} hrs`);
+      stepPosition();
+      return true;
+    },
+    { colon:true }
+  );
+}
+function stepPosition() {
+  menuStep("Position premium? &nbsp;<span class='dim'>Section 3.C</span>", [
+    { k:"y", text:"Yes", hint:"(Lead $3.25 / Lead NIPD $6.50 / Purser IPD $7.50 / Galley $1–2)", pick:() => stepPositionAmt() },
+    { k:"n", text:"No", pick:() => { trip.position = 0; echo("Position premium: no"); calculate(); } }
+  ], "n");
+}
+function stepPositionAmt() {
+  inputStep("&nbsp;", "Premium $/hr (Enter for 3.25)",
+    raw => {
+      const t = raw.trim();
+      const v = t === "" ? 3.25 : parseFloat(t);
+      if (Number.isNaN(v) || v < 0) return "Enter a value ≥ 0";
+      trip.position = v;
+      echo(`Position premium: ${usd(v)}/hr`);
+      calculate();
+      return true;
+    },
+    { placeholder:"3.25" }
+  );
+}
+
+/* ── calculate & render ─────────────────────────────────── */
+function rline(nm, dt, amt, note, cls = "") {
+  return `<div class="rline ${cls}"><span class="nm">${nm}</span>` +
+         `<span class="dt">${dt}${note ? " · " + note : ""}</span>` +
+         `<span class="amt">${usd(amt)}</span></div>`;
+}
+function calculate() {
+  setStatus("CALCULATING");
+  const brace = put(`<div class="dim" style="margin-top:14px">   Brace for impact! Brace for impact! Brace for impact!</div>`);
+
+  const pd = currentPerDiem();
+  const r = trip.rate;
+  const flightPay = trip.credit * r;
+  const intlPay   = (trip.route === "nipd" || trip.route === "ipd") ? trip.credit * INTL_OVERRIDE[trip.route] : 0;
+  const boardHrs  = (trip.legs * trip.boardMin) / 60;
+  const boardPay  = boardHrs * (r / 2);
+  const pdRate    = (trip.route === "nipd" || trip.route === "ipd") ? pd.intl : pd.dom;
+  const perDiem   = trip.tafb * pdRate;
+  const rigCredit = Math.max(0, trip.tafb / 3.5 - trip.credit);
+  const tripRigPay = trip.tripRig ? rigCredit * r : 0;
+  const sitPay    = trip.sitExcess > 0 ? (trip.sitExcess / 2) * r : 0;
+  const posPay    = trip.position * trip.credit;
+  const total     = flightPay + intlPay + boardPay + perDiem + tripRigPay + sitPay + posPay;
+
+  const render = () => {
+    brace.remove();
+    setStatus("SUMMARY");
+    let h = `<div class="step"><div class="hrule">${HR}</div>` +
+            `<div class="banner">TRIP PAY SUMMARY</div>` +
+            `<div class="hrule">${HR}</div>`;
+    h += rline("Flight Pay", `${trip.credit.toFixed(2)} hrs @ ${usd(r)}`, flightPay);
+    if (intlPay > 0)
+      h += rline("Intl Override", `${trip.credit.toFixed(2)} hrs @ ${usd(INTL_OVERRIDE[trip.route])} (${trip.route.toUpperCase()})`, intlPay);
+    h += rline("Boarding Pay", `${trip.legs} legs × ${trip.boardMin} min @ ${usd(r/2)}/hr`, boardPay, `${boardHrs.toFixed(2)} hrs`);
+    h += rline("Per Diem", `${trip.tafb.toFixed(2)} TAFB hrs @ ${usd(pdRate)}/hr`, perDiem, "tax-free");
+    if (tripRigPay > 0)
+      h += rline("Trip Rig", `+${rigCredit.toFixed(2)} credit hrs @ ${usd(r)}`, tripRigPay);
+    if (sitPay > 0)
+      h += rline("Sit Rig", `${trip.sitExcess.toFixed(2)} excess hrs ÷ 2 @ ${usd(r)}`, sitPay);
+    if (posPay > 0)
+      h += rline("Position Prem", `${trip.credit.toFixed(2)} hrs @ ${usd(trip.position)}/hr`, posPay);
+    h += `<div class="hrule">${"─".repeat(80)}</div>`;
+    h += rline("<b>ESTIMATED GROSS PAY</b>", "", total, "", "rtotal");
+    h += `<div class="cy">Per diem is tax-free — your taxable total is lower</div>`;
+    h += `<div class="hrule">${HR}</div>`;
+    h += `<div class="dim">Jump and slide! &nbsp;·&nbsp; Estimate only — verify against your pay statement.</div>`;
+    h += `<button class="again" type="button" onclick="restart()">Calculate another trip</button></div>`;
+    const div = put(h);
+    screen.scrollTop = screen.scrollHeight;
+  };
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) render();
+  else setTimeout(render, 650);
+}
+
+function restart() {
+  for (const k of Object.keys(trip)) delete trip[k];
+  activeMenu = null;
+  screen.innerHTML = "";
+  setStatus("READY");
+  boot();
+}
+
+boot();
+</script>
+</body>
+</html>
