@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>fapaay - About</title>
+<title>fapaay - About fa-toolkit</title>
 <meta name="description" content="Open-source AA flight attendant pay tools built by an FA, for FAs. No AA login. No data collected. 2024 APFA CBA.">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -46,18 +46,7 @@
   p { line-height:1.65; margin-bottom:10px; }
   p:last-child { margin-bottom:0; }
 
-  table.tools {
-    border-collapse:collapse; width:100%; font-size:12px; margin:14px 0;
-  }
-  table.tools th, table.tools td {
-    border:1px solid #1a1a1a; padding:7px 10px;
-    text-align:left; vertical-align:top;
-  }
-  table.tools th { background:#f2f2f2; font-weight:bold; }
-  .status-avail { color:#1a7a1a; font-weight:bold; }
-  .status-beta  { color:#b87000; font-weight:bold; }
-
-  .tagline {
+.tagline {
     margin-top:40px; padding-top:20px; border-top:1px solid #cccccc;
     font-size:12px; color:#808080; font-style:italic;
   }
@@ -87,29 +76,6 @@
 </div>
 
 <div class="content">
-
-  <h1>fa-toolkit</h1>
-  <p>A growing suite of open-source tools built by an AA flight attendant, for AA flight attendants.</p>
-  <p>Every tool here is written in plain Python, requires no special software beyond a Python install, and is designed to be useful on a layover laptop or a jump seat phone.</p>
-
-  <h2>Tools</h2>
-  <table class="tools">
-    <tr>
-      <th>Tool</th>
-      <th>Description</th>
-      <th>Status</th>
-    </tr>
-    <tr>
-      <td>Pay Calculator<br><small><a href="https://github.com/hart-dev-sudo/fa-toolkit">source</a></small></td>
-      <td>Estimates trip pay based on the 2024 APFA CBA &mdash; flight pay, boarding, per diem, rigs, position premiums, monthly estimate</td>
-      <td class="status-avail">Available</td>
-    </tr>
-    <tr>
-      <td><a href="/">fapaay</a><br><small><a href="https://github.com/hart-dev-sudo/fa-toolkit">source</a></small></td>
-      <td>Browser-based single-trip pay estimator. No install, works on any phone.</td>
-      <td class="status-beta">Beta</td>
-    </tr>
-  </table>
 
   <h2>No AA login, ever</h2>
   <p>Every tool in this repo works entirely from numbers you type in yourself &mdash; credit hours, TAFB, legs, whatever your trip paperwork shows. Nothing here logs into HSS, PBS, or any other AA system on your behalf, holds your AA credentials, or pulls your schedule automatically. There's no account, no session, no token &mdash; nothing AA could revoke even if it wanted to, because there's nothing to revoke.</p>
