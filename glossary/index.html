@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fapaay - Contract glossary & pay reference</title>
+<meta name="description" content="Plain-English guide to AA flight attendant pay terms: credit hours, TAFB, per diem, boarding pay, rigs, guarantees, premiums. 2024 APFA CBA.">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+  body {
+    background:#ffffff; color:#1a1a1a;
+    font-family:Arial, Helvetica, sans-serif; font-size:13px;
+  }
+  a { color:#0645ad; }
+
+  /* ── topbar ── */
+  .topbar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; border-bottom:1px solid #cccccc;
+  }
+  .wordmark { font-family:Verdana, Geneva, sans-serif; text-decoration:none; color:inherit; }
+  .wordmark .fap { font-size:22px; font-weight:bold; letter-spacing:-1px; }
+  .wordmark .aa  { color:#cc0000; }
+  .wordmark .sub { display:block; font-size:10px; color:#808080; letter-spacing:2px; }
+  .topnav { font-size:12px; }
+  .topnav a {
+    color:#1a1a1a; text-decoration:none;
+    padding:4px 8px; display:inline-block;
+  }
+  .topnav a:hover { text-decoration:underline; }
+  .topnav a:focus-visible { outline:2px solid #0645ad; }
+
+  /* ── layout ── */
+  .wrap {
+    display:flex; gap:32px; align-items:flex-start;
+    padding:24px 16px; max-width:960px; margin:0 auto;
+  }
+  .toc-col {
+    flex:0 0 180px; position:sticky; top:16px;
+  }
+  .content-col { flex:1 1 0; min-width:0; }
+
+  /* ── TOC ── */
+  .toc-title {
+    font-family:Verdana, Geneva, sans-serif; font-size:11px;
+    font-weight:bold; letter-spacing:1px; text-transform:uppercase;
+    color:#808080; margin-bottom:10px;
+  }
+  .toc ol { list-style:none; padding:0; }
+  .toc li { margin-bottom:6px; }
+  .toc a { color:#0645ad; font-size:12px; text-decoration:none; line-height:1.4; display:block; }
+  .toc a:hover { text-decoration:underline; }
+
+  /* ── sections ── */
+  .gloss-section {
+    border-top:2px solid #1a1a1a; padding:20px 0 24px;
+  }
+  .gloss-section:first-child { border-top:none; padding-top:0; }
+
+  .section-header {
+    display:flex; align-items:baseline; gap:12px; margin-bottom:14px;
+  }
+  .section-title {
+    font-family:Verdana, Geneva, sans-serif; font-size:15px; font-weight:bold;
+  }
+  .cba-ref {
+    font-size:11px; color:#808080; white-space:nowrap;
+  }
+
+  .gloss-body { line-height:1.65; }
+  .gloss-body p { margin-bottom:10px; }
+  .gloss-body p:last-child { margin-bottom:0; }
+
+  .gloss-h { font-weight:bold; margin-top:14px; margin-bottom:4px; }
+  .gloss-h:first-child { margin-top:0; }
+
+  .example {
+    background:#f5f5f5; border-left:3px solid #cccccc;
+    padding:10px 12px; margin:12px 0;
+    font-family:"Cascadia Mono", Consolas, Menlo, "DejaVu Sans Mono", monospace;
+    font-size:12px; line-height:1.7; white-space:pre-wrap;
+  }
+
+  dl.rates { margin:8px 0 10px; }
+  dl.rates dt { font-weight:bold; margin-top:8px; }
+  dl.rates dd { margin-left:16px; color:#333; }
+
+  ul.plain { list-style:none; padding:0; margin:6px 0 10px; }
+  ul.plain li { padding:3px 0; border-bottom:1px solid #eeeeee; }
+  ul.plain li:last-child { border-bottom:none; }
+
+  .note { font-size:12px; color:#555; margin-top:10px; }
+
+  /* ── footer ── */
+  footer {
+    max-width:960px; margin:0 auto; padding:14px 16px 28px;
+    border-top:1px solid #cccccc; font-size:11px; color:#555;
+  }
+
+  @media (max-width:640px) {
+    .wrap { flex-direction:column; padding:16px 12px; gap:0; }
+    .toc-col { position:static; flex:none; width:100%; margin-bottom:20px; }
+    .toc ol { display:flex; flex-wrap:wrap; gap:4px 12px; }
+    .toc-title { margin-bottom:8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="wordmark" href="/">
+    <span class="fap">fap<span class="aa">aa</span>y</span>
+    <span class="sub">FA PAY&nbsp;&nbsp;·&nbsp;&nbsp;UNOFFICIAL</span>
+  </a>
+  <nav class="topnav">
+    <a href="/">Calculator</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc-col toc" aria-label="Glossary sections">
+    <div class="toc-title">On this page</div>
+    <ol>
+      <li><a href="#credit">Credit Hours</a></li>
+      <li><a href="#tafb">TAFB</a></li>
+      <li><a href="#perdiem">Per Diem</a></li>
+      <li><a href="#boarding">Boarding Pay</a></li>
+      <li><a href="#trip-rig">Trip Rig</a></li>
+      <li><a href="#sit-rig">Sit Rig</a></li>
+      <li><a href="#guarantee">Guarantees</a></li>
+      <li><a href="#position">Position Premiums</a></li>
+      <li><a href="#intl">NIPD &amp; IPD</a></li>
+      <li><a href="#pay-system">Pay System</a></li>
+    </ol>
+  </nav>
+
+  <main class="content-col">
+
+    <div class="gloss-section" id="credit">
+      <div class="section-header">
+        <span class="section-title">Credit Hours</span>
+        <span class="cba-ref">CBA Section 3.A</span>
+      </div>
+      <div class="gloss-body">
+        <p>Credit hours are the foundation of your flight pay. The clock starts when the parking brake is released (chocks out) at departure and stops when the parking brake is set (chocks in) at arrival. This is block time &mdash; not wheels up to wheels down, not door to door.</p>
+        <p>Your trip paperwork (QIK/SABRE) shows credit hours already calculated. This is the number you enter into the calculator.</p>
+        <div class="example">ORD → DFW  brake release 08:02, brake set 10:19
+Credit = 2 hrs 17 min  (2:17 or 2.28)</div>
+      </div>
+    </div>
+
+    <div class="gloss-section" id="tafb">
+      <div class="section-header">
+        <span class="section-title">TAFB &mdash; Time Away From Base</span>
+        <span class="cba-ref">CBA Section 4.A</span>
+      </div>
+      <div class="gloss-body">
+        <p>TAFB is how long you're away from your home base. It's used to calculate your per diem, not your flight pay.</p>
+        <p class="gloss-h">Clock start &mdash; sign-in at base:</p>
+        <ul class="plain">
+          <li>Domestic: 1 hour before scheduled departure</li>
+          <li>International: 1 hr 15 min before scheduled departure</li>
+        </ul>
+        <p class="gloss-h">Clock stop &mdash; debrief after blocking in at base:</p>
+        <ul class="plain">
+          <li>Domestic: 15 minutes after block in</li>
+          <li>IPD: 30 minutes after block in</li>
+        </ul>
+        <p>Your trip paperwork shows TAFB already calculated. It's the number next to "TAFB" on your sequence.</p>
+        <div class="example">Sign-in ORD Monday 07:02  (1 hr before 08:02 departure)
+Block in ORD Wednesday 16:29 + 15 min debrief
+TAFB = approx 56:57 hrs</div>
+      </div>
+    </div>
+
+    <div class="gloss-section" id="perdiem">
+      <div class="section-header">
+        <span class="section-title">Per Diem</span>
+        <span class="cba-ref">CBA Section 4.A</span>
+      </div>
+      <div class="gloss-body">
+        <p>Per diem is your meal and incidental expense money, paid for every hour you're away from base (your TAFB hours).</p>
+        <dl class="rates">
+          <dt>Current rates (effective Oct 1, 2025)</dt>
+          <dd>Domestic: $2.90/hr</dd>
+          <dd>International: $3.45/hr</dd>
+        </dl>
+        <p><strong>The best part: per diem is largely tax-free.</strong> It's not reported as income in most cases. Every dollar of per diem is a dollar you keep, unlike flight pay which gets taxed like regular income.</p>
+        <p class="note">There are exceptions, particularly on single-day trips. If tax treatment matters for your situation, consult a tax professional or the CBA directly.</p>
+        <div class="example">Domestic 3-day trip, TAFB = 56.90 hrs:
+56.90 x $2.90 = $165.01  (tax-free in most cases)</div>
+      </div>
+    </div>
+
+    <div class="gloss-section" id="boarding">
+      <div class="section-header">
+        <span class="section-title">Boarding Pay</span>
+        <span class="cba-ref">CBA Sections 3.D &amp; 11.M</span>
+      </div>
+      <div class="gloss-body">
+        <p>You get paid for boarding time even though it doesn't count as credit hours. The rate is 50% of your hourly rate. The time used is the published scheduled boarding time per leg, not actual boarding time.</p>
+        <p class="gloss-h">Current published boarding times (AA flex executed):</p>
+        <ul class="plain">
+          <li>IPD flights (any aircraft) &mdash; 50 min/leg</li>
+          <li>NIPD flights (any aircraft) &mdash; 45 min/leg</li>
+          <li>DOM widebody / 161+ seats &mdash; 40 min/leg</li>
+          <li>DOM narrowbody &lt;161 seats (A319/A320) &mdash; 35 min/leg</li>
+        </ul>
+        <div class="example">7th year FA, 4-leg A321 domestic:
+Rate: $60.84/hr   Boarding rate: $30.42/hr
+4 legs x 40 min = 160 min = 2.67 hrs
+2.67 x $30.42 = $81.17 boarding pay</div>
+        <p class="note">Edge-case exceptions apply (standby FAs, irregular ops, etc.). Reference CBA Sections 3.D and 11.M for full details.</p>
+      </div>
+    </div>
+
+    <div class="gloss-section" id="trip-rig">
+      <div class="section-header">
+        <span class="section-title">Trip Rig</span>
+        <span class="cba-ref">CBA Section 11.D.4</span>
+      </div>
+      <div class="gloss-body">
+        <p class="gloss-h">What is it?</p>
+        <p>A pay protection rule that guarantees you earn at least 1 hour of pay for every 3.5 hours you're away from base (TAFB). It exists to prevent scheduling you on a trip with tons of sit time and very little flying.</p>
+        <p class="gloss-h">How it works</p>
+        <p>Divide your TAFB by 3.5. If that number is bigger than your credit hours, you get paid the difference. If your credit hours are already higher, the rig doesn't kick in.</p>
+        <div class="example">3-day trip:  Credit hours 14:22 (14.37 hrs)  |  TAFB 61:45 (61.75 hrs)
+
+Step 1 - Rig floor:    61.75 ÷ 3.5 = 17.64 hrs
+Step 2 - Compare:      17.64 floor vs. 14.37 credit  →  3.27 hrs under
+Step 3 - Pay diff:     3.27 hrs x $60.84 (7th yr) = $198.95 trip rig pay</div>
+        <p>That 3.27 hours also adds to your credit total for the trip, counting toward your monthly guarantee. If your credit hours had been 18+ hrs, the rig would not have triggered at all.</p>
+      </div>
+    </div>
+
+    <div class="gloss-section" id="sit-rig">
+      <div class="section-header">
+        <span class="section-title">Sit Rig</span>
+        <span class="cba-ref">CBA Section 11.D.6</span>
+      </div>
+      <div class="gloss-body">
+        <p class="gloss-h">What is it?</p>
+        <p>Extra pay when you have a long stopover between flights on the same duty day. If a stopover exceeds 2 hours 30 minutes, you earn half your hourly rate for the time beyond that threshold.</p>
+        <ul class="plain">
+          <li><strong>Stopover</strong> = same-day sit between flights &mdash; this applies</li>
+          <li><strong>Layover</strong> = overnight off-duty period &mdash; does NOT apply</li>
+        </ul>
+        <p>Sit rigs are per-stopover, not per-trip. Each stopover is evaluated separately.</p>
+        <div class="example">4:00 stopover at DFW (same duty day):
+
+Actual stopover:    4:00  (4.00 hrs)
+Free threshold:     2:30  (2.50 hrs)
+Eligible excess:    1:30  (1.50 hrs)  ← only this gets paid
+
+7th year ($60.84/hr), sit rig rate = 50%:
+1.50 x $30.42 = $45.63 extra</div>
+        <p class="note">Sit rig does NOT add credit hours &mdash; it's additional pay only.</p>
+      </div>
+    </div>
+
+    <div class="gloss-section" id="guarantee">
+      <div class="section-header">
+        <span class="section-title">Lineholder &amp; Reserve Guarantees</span>
+        <span class="cba-ref">CBA Sections 3.A &amp; 11.C</span>
+      </div>
+      <div class="gloss-body">
+        <p>The contract guarantees a minimum number of credit hours paid each month, regardless of how little you actually fly.</p>
+        <dl class="rates">
+          <dt>Lineholder guarantee: 71 hours/month</dt>
+          <dd>If your scheduled trips credit less than 71 hours, AA pays you as if you flew 71. Most lineholders fly more &mdash; this is a floor, not a target.</dd>
+          <dt>Reserve guarantee: 75 hours/month</dt>
+          <dd>Reserve FAs get a higher floor because they're on call with less schedule control. You get paid 75 hours minimum even if you sit reserve all month and never get called out.</dd>
+        </dl>
+        <p class="note">These guarantees are for pay purposes only. They don't affect per diem &mdash; you only earn per diem for trips you actually fly. Reserve scheduling has additional rules and protections beyond what's covered here.</p>
+      </div>
+    </div>
+
+    <div class="gloss-section" id="position">
+      <div class="section-header">
+        <span class="section-title">Position Premiums</span>
+        <span class="cba-ref">CBA Section 3.C</span>
+      </div>
+      <div class="gloss-body">
+        <p>Certain positions earn extra pay on top of your base hourly rate, paid per credit hour the same as your base rate.</p>
+        <ul class="plain">
+          <li><strong>Lead FA</strong> (domestic narrowbody, A321XLR, B777, B787) &mdash; +$3.25/hr</li>
+          <li><strong>Lead FA</strong> (B777 or B787, NIPD route) &mdash; +$6.50/hr</li>
+          <li><strong>Purser</strong> (B777 or B787, IPD route) &mdash; +$7.50/hr</li>
+          <li><strong>Galley</strong> (A321XLR, B777, B787) &mdash; +$1.00&ndash;$2.00/hr depending on aircraft</li>
+        </ul>
+        <div class="example">Lead on domestic A321XLR, 7th year, 18.07 credit hrs:
+
+Base rate:        $60.84/hr
+Lead premium:   + $ 3.25/hr
+Effective rate:   $64.09/hr
+
+18.07 x $64.09 = $1,159.15  (vs. $1,099.18 without premium)
+Difference: $59.97 extra for the trip</div>
+      </div>
+    </div>
+
+    <div class="gloss-section" id="intl">
+      <div class="section-header">
+        <span class="section-title">NIPD &amp; IPD &mdash; International Override Pay</span>
+        <span class="cba-ref">CBA Section 3.G</span>
+      </div>
+      <div class="gloss-body">
+        <p>On international routes you earn an additional override on top of your base hourly rate, paid per credit hour.</p>
+        <dl class="rates">
+          <dt>NIPD &mdash; Non-International Premium Destination</dt>
+          <dd>Routes like CUN, NAS, GDL, SJO, SJU, etc. Override: +$3.00/hr</dd>
+          <dt>IPD &mdash; International Premium Destination</dt>
+          <dd>Routes like LHR, CDG, NRT, GRU, HKG, etc. Override: +$3.75/hr</dd>
+        </dl>
+        <p class="gloss-h">Two separate things happening at once</p>
+        <p>The override stacks on top of your base rate (calculated on credit hours). Your per diem also gets the higher international rate, but that's completely separate. Neither affects how the other is calculated.</p>
+        <div class="example">7th year, IPD, 9:45 credit (9.75 hrs), 28:00 TAFB:
+
+Base flight pay:   9.75 x $60.84  = $593.19
+IPD override:      9.75 x $ 3.75  = $ 36.56
+Per diem:         28.00 x $ 3.45  = $ 96.60
+                                    --------
+Total:                               $726.35</div>
+      </div>
+    </div>
+
+    <div class="gloss-section" id="pay-system">
+      <div class="section-header">
+        <span class="section-title">AA Pay System</span>
+        <span class="cba-ref">CBA Section 3.O</span>
+      </div>
+      <div class="gloss-body">
+        <p>You get two checks per month: one at the end of the month (the advance) and one mid-month (the balance).</p>
+        <dl class="rates">
+          <dt>30th &mdash; Advance check</dt>
+          <dd>Paid on the 30th (or preceding business day if weekend). Contains only the advance &mdash; no trip earnings, no per diem. Taxes and deductions apply. The advance is contractually fixed at 37.5 credit hours x your hourly rate (CBA Section 3.O.2), regardless of how much you actually flew.</dd>
+          <dt>15th &mdash; Balance check</dt>
+          <dd>Paid on the 15th (or following business day if weekend). The advance comes back out first, but this check typically comes out ahead &mdash; trip earnings, boarding pay, rigs, and per diem all stack here. Only the per diem portion is tax-free; the rest is taxed normally.</dd>
+        </dl>
+        <p class="gloss-h">Contract month vs. calendar month</p>
+        <p>The "contract month" AA uses for pay purposes doesn't always line up with the calendar month. AA publishes the adjusted dates annually before vacation bids. Check your pay statement &mdash; it's listed at the top as "Contract Month."</p>
+        <p class="note">On a light flying month the balance check may barely cover the advance recovery, leaving little net on the 15th. That's expected &mdash; the advance already went out on the 30th. The money was already in your account. February advance pays on the 28th.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  fapaay.com &nbsp;·&nbsp; <a href="/">calculator</a> &nbsp;·&nbsp; Estimates only. Not an AA or APFA product. Reference the CBA for anything official.
+</footer>
+
+</body>
+</html>

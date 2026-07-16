@@ -39,12 +39,12 @@
   .wordmark .aa  { color:#cc0000; }
   .wordmark .sub { display:block; font-size:10px; color:#808080; letter-spacing:2px; }
   .topnav { font-size:12px; }
-  .topnav button {
+  .topnav a, .topnav button {
     background:none; border:none; font:inherit; color:#1a1a1a;
-    cursor:pointer; padding:4px 8px;
+    cursor:pointer; padding:4px 8px; text-decoration:none; display:inline-block;
   }
-  .topnav button:hover { text-decoration:underline; }
-  .topnav button:focus-visible { outline:2px solid #0645ad; }
+  .topnav a:hover, .topnav button:hover { text-decoration:underline; }
+  .topnav a:focus-visible, .topnav button:focus-visible { outline:2px solid #0645ad; }
 
   /* ── layout ── */
   .wrap {
@@ -184,6 +184,7 @@
     <span class="sub">FA PAY&nbsp;&nbsp;·&nbsp;&nbsp;UNOFFICIAL</span>
   </div>
   <nav class="topnav">
+    <a href="/glossary">Glossary</a>
     <button type="button" onclick="termSay(['Estimates the pay for one trip under the 2024 APFA CBA.','Everything runs on your phone. Nothing is sent or saved.'])">About</button>
     <button type="button" onclick="termSay(['You were never logged in.','Nothing you entered was saved.','There is nothing to log out of.'])">Log Out</button>
   </nav>
