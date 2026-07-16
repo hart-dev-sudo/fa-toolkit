@@ -683,7 +683,7 @@ def _gloss_boarding():
     e.g. 7th year FA, 4-leg A321 domestic:
          Rate: $60.84/hr   Boarding rate: $30.42/hr
          4 legs x 40 min = 160 min = 2.67 hrs
-         2.67 x $30.42 = $81.17 boarding pay
+         2.67 x $30.42 = $81.22 boarding pay
 
   Note: There are edge case exceptions to boarding pay
   (standby FAs, irregular operations, etc.).
@@ -843,9 +843,9 @@ def _gloss_position():
          Lead premium:   + $ 3.25/hr
          Effective rate:   $64.09/hr
 
-         18.07 credit hrs x $64.09 = $1,159.15 flight pay
-         vs. $1,099.18 without the premium
-         Difference: $59.97 extra for the trip
+         18.07 credit hrs x $64.09 = $1,158.11 flight pay
+         vs. $1,099.38 without the premium
+         Difference: $58.73 extra for the trip
 
   CBA Reference: Section 3.C
 """)
