@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fapaay - About</title>
+<meta name="description" content="Open-source AA flight attendant pay tools built by an FA, for FAs. No AA login. No data collected. 2024 APFA CBA.">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body {
+    background:#ffffff; color:#1a1a1a;
+    font-family:Arial, Helvetica, sans-serif; font-size:13px;
+  }
+  a { color:#0645ad; }
+
+  .topbar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; border-bottom:1px solid #cccccc;
+  }
+  .wordmark { font-family:Verdana, Geneva, sans-serif; text-decoration:none; color:inherit; }
+  .wordmark .fap { font-size:22px; font-weight:bold; letter-spacing:-1px; }
+  .wordmark .aa  { color:#cc0000; }
+  .wordmark .sub { display:block; font-size:10px; color:#808080; letter-spacing:2px; }
+  .topnav { font-size:12px; }
+  .topnav a, .topnav button {
+    background:none; border:none; font:inherit; color:#1a1a1a;
+    cursor:pointer; padding:4px 8px; text-decoration:none; display:inline-block;
+  }
+  .topnav a:hover, .topnav button:hover { text-decoration:underline; }
+  .topnav a:focus-visible, .topnav button:focus-visible { outline:2px solid #0645ad; }
+
+  .content {
+    max-width:720px; margin:0 auto; padding:32px 16px 48px;
+  }
+
+  h1 {
+    font-family:Verdana, Geneva, sans-serif; font-size:18px;
+    font-weight:bold; margin-bottom:10px;
+  }
+  h2 {
+    font-family:Verdana, Geneva, sans-serif; font-size:14px;
+    font-weight:bold; margin:32px 0 10px; padding-top:28px;
+    border-top:2px solid #1a1a1a;
+  }
+  p { line-height:1.65; margin-bottom:10px; }
+  p:last-child { margin-bottom:0; }
+
+  table.tools {
+    border-collapse:collapse; width:100%; font-size:12px; margin:14px 0;
+  }
+  table.tools th, table.tools td {
+    border:1px solid #1a1a1a; padding:7px 10px;
+    text-align:left; vertical-align:top;
+  }
+  table.tools th { background:#f2f2f2; font-weight:bold; }
+  .status-avail { color:#1a7a1a; font-weight:bold; }
+  .status-beta  { color:#b87000; font-weight:bold; }
+
+  .tagline {
+    margin-top:40px; padding-top:20px; border-top:1px solid #cccccc;
+    font-size:12px; color:#808080; font-style:italic;
+  }
+
+  footer {
+    max-width:720px; margin:0 auto; padding:14px 16px 28px;
+    border-top:1px solid #cccccc; font-size:11px; color:#555;
+  }
+
+  @media (max-width:520px) {
+    table.tools { font-size:11px; }
+    table.tools th, table.tools td { padding:5px 7px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="wordmark" href="/">
+    <span class="fap">fap<span class="aa">aa</span>y</span>
+    <span class="sub">FA PAY&nbsp;&nbsp;·&nbsp;&nbsp;UNOFFICIAL</span>
+  </a>
+  <nav class="topnav">
+    <a href="/">Calculator</a>
+    <a href="/glossary">Glossary</a>
+  </nav>
+</div>
+
+<div class="content">
+
+  <h1>fa-toolkit</h1>
+  <p>A growing suite of open-source tools built by an AA flight attendant, for AA flight attendants.</p>
+  <p>Every tool here is written in plain Python, requires no special software beyond a Python install, and is designed to be useful on a layover laptop or a jump seat phone.</p>
+
+  <h2>Tools</h2>
+  <table class="tools">
+    <tr>
+      <th>Tool</th>
+      <th>Description</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td>Pay Calculator<br><small><a href="https://github.com/hart-dev-sudo/fa-toolkit">source</a></small></td>
+      <td>Estimates trip pay based on the 2024 APFA CBA &mdash; flight pay, boarding, per diem, rigs, position premiums, monthly estimate</td>
+      <td class="status-avail">Available</td>
+    </tr>
+    <tr>
+      <td><a href="/">fapaay</a><br><small><a href="https://github.com/hart-dev-sudo/fa-toolkit">source</a></small></td>
+      <td>Browser-based single-trip pay estimator. No install, works on any phone.</td>
+      <td class="status-beta">Beta</td>
+    </tr>
+  </table>
+
+  <h2>No AA login, ever</h2>
+  <p>Every tool in this repo works entirely from numbers you type in yourself &mdash; credit hours, TAFB, legs, whatever your trip paperwork shows. Nothing here logs into HSS, PBS, or any other AA system on your behalf, holds your AA credentials, or pulls your schedule automatically. There's no account, no session, no token &mdash; nothing AA could revoke even if it wanted to, because there's nothing to revoke.</p>
+  <p>That's a deliberate design choice, not an oversight. Any tool that <em>does</em> import or sync your schedule automatically has to authenticate as you to do it, one way or another &mdash; and that's exactly the kind of access AA has moved to shut down before. This suite stays on the safe side of that line by design, permanently.</p>
+
+  <h2>Disclaimer</h2>
+  <p>This project is not affiliated with, endorsed by, or sponsored by American Airlines or the Association of Professional Flight Attendants (APFA). All tools are built and maintained independently.</p>
+  <p>Contract data is sourced from publicly available APFA CBA documents. All calculations are estimates for informational purposes only. Nothing here constitutes legal, tax, financial, or payroll advice. Always verify your pay against your official pay statement, and for anything contractual, reference the actual CBA or consult your local APFA representative.</p>
+  <p>The author assumes no liability for errors, omissions, or decisions made based on output from these tools.</p>
+
+  <p class="tagline">Built layover by layover.</p>
+
+</div>
+
+<footer>
+  fapaay.com &nbsp;·&nbsp; <a href="/">calculator</a> &nbsp;·&nbsp; <a href="/glossary">glossary</a>
+</footer>
+
+</body>
+</html>
