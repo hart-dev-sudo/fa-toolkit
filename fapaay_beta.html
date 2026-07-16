@@ -197,7 +197,7 @@
       <div class="term-titlebar">
         <button class="tb-btn" type="button" title="Print or, realistically, screenshot it" onclick="termSay(['Screenshot it. You know you were going to anyway.'])">&#128424;</button>
         <button class="tb-btn" type="button" title="Start over" onclick="restart()">&#8635;</button>
-        <button class="tb-btn" type="button" title="Help" onclick="termSay(['Type your numbers, tap the menu lines \u2014 or just type 1/2/3 and y/n.','Enter takes the default when one is shown.','q is not required. This is the future.'])">?</button>
+        <button class="tb-btn" type="button" title="Help" onclick="termSay(['Type your numbers, tap the menu lines or just type 1/2/3 and y/n.','Enter takes the default when one is shown.','q is not required. This is the future.'])">?</button>
         <span class="term-title" id="termTitle">fapaay beta v2.0</span>
       </div>
 
@@ -338,7 +338,7 @@ function setStatus(t) { statusStep.textContent = t; }
 function inputStep(labelHtml, hint, onSubmit, opts = {}) {
   const div = step(
     `<div class="prompt-label">${labelHtml}</div>` +
-    (hint ? `<div class="dim">${hint} <span class="gr">\u2014 press \u23CE</span></div>` : "") +
+    (hint ? `<div class="dim">${hint} <span class="gr">press \u23CE</span></div>` : "") +
     `<div class="inrow"><input class="term-input" type="text" enterkeyhint="go" inputmode="${opts.inputmode||"decimal"}"` +
     (opts.placeholder ? ` placeholder="${opts.placeholder}"` : "") +
     `>` +
