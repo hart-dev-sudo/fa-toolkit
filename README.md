@@ -10,7 +10,7 @@ Every tool here is written in plain Python, requires no special software beyond 
 
 | Tool | Description | Status |
 |------|-------------|--------|
-| [Pay Calculator](tools/pay_calculator/) | Estimates trip pay based on the 2024 APFA CBA — flight pay, boarding, per diem, rigs, position premiums, monthly estimate | Available |
+| [Pay Calculator](tools/pay_calculator/) | Estimates trip pay based on the 2024 APFA CBA flight pay, boarding, per diem, rigs, position premiums, monthly estimate | Available |
 | [fapaay](https://fapaay.com) ([source](tools/web/)) | Browser-based single-trip pay estimator. No install, works on any phone. | Beta |
 
 More tools planned. See [CHANGELOG.md](CHANGELOG.md) for roadmap.
@@ -19,9 +19,9 @@ More tools planned. See [CHANGELOG.md](CHANGELOG.md) for roadmap.
 
 ## No AA login, ever
 
-Every tool in this repo works entirely from numbers you type in yourself — credit hours, TAFB, legs, whatever your trip paperwork shows. Nothing here logs into HSS, PBS, or any other AA system on your behalf, holds your AA credentials, or pulls your schedule automatically. There's no account, no session, no token — nothing AA could revoke even if it wanted to, because there's nothing to revoke.
+Every tool in this repo works entirely from numbers you type in yourself credit hours, TAFB, legs, whatever your trip paperwork shows. Nothing here logs into HSS, PBS, or any other AA system on your behalf, holds your AA credentials, or pulls your schedule automatically. There's no account, no session, no token nothing AA could revoke even if it wanted to, because there's nothing to revoke.
 
-That's a deliberate design choice, not an oversight. Any tool that *does* import or sync your schedule automatically has to authenticate as you to do it, one way or another — and that's exactly the kind of access AA has moved to shut down before. This suite stays on the safe side of that line by design, permanently.
+That's a deliberate design choice, not an oversight. Any tool that *does* import or sync your schedule automatically has to authenticate as you to do it, one way or another and that's exactly the kind of access AA has moved to shut down before. This suite stays on the safe side of that line by design, permanently.
 
 ---
 

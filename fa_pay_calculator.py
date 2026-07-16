@@ -41,7 +41,7 @@ def header(title):
 
 
 # ── Session monthly estimate store ───────────────────────
-# Resets on exit — nothing is saved between sessions
+# Resets on exit nothing is saved between sessions
 monthly_estimate = {
     "trips":        [],   # list of trip result dicts
     "contract_start": None,
@@ -49,7 +49,7 @@ monthly_estimate = {
     "hourly_rate":    None,
 }
 
-ADVANCE_HOURS = 37.5   # CBA Section 3.O.2 — contractually fixed
+ADVANCE_HOURS = 37.5   # CBA Section 3.O.2 contractually fixed
 
 # ── CBA Data ─────────────────────────────────────────────
 PAY_SCALE_BASE = {
@@ -77,7 +77,7 @@ PER_DIEM_RATES = {
 INTL_OVERRIDE = {"nipd": 3.00, "ipd": 3.75}
 
 BOARDING_TIMES = {
-    "dom_narrowbody_small": 35,   # <161 seats  (A319/A320 — rare on domestic)
+    "dom_narrowbody_small": 35,   # <161 seats  (A319/A320 rare on domestic)
     "dom_narrowbody_large": 40,   # 161+ seats  (ALL 738/MAX8 Oasis, A321-family)
     "dom_widebody":         40,   # B777, B787
     "nipd":                 45,
@@ -147,7 +147,7 @@ def parse_int(prompt, default=None, min_val=0):
                 return val
             print(c(C.RED, f"   [!] Enter a number >= {min_val}"))
         except ValueError:
-            print(c(C.RED, "   [!] Enter a whole number — leave everything else behind"))
+            print(c(C.RED, "   [!] Enter a whole number leave everything else behind"))
 
 def parse_float(prompt, default=None, min_val=0.0):
     """q/quit → main menu."""
@@ -163,7 +163,7 @@ def parse_float(prompt, default=None, min_val=0.0):
                 return val
             print(c(C.RED, f"   [!] Enter a value >= {min_val}"))
         except ValueError:
-            print(c(C.RED, "   [!] Invalid — leave everything and try again"))
+            print(c(C.RED, "   [!] Invalid leave everything and try again"))
 
 def parse_yes_no(prompt, default="n"):
     """q/quit → main menu."""
@@ -180,7 +180,7 @@ def parse_yes_no(prompt, default="n"):
 # ── Reference tables ──────────────────────────────────────
 def view_pay_scale():
     clear()
-    header("2024 APFA PAY SCALE  —  Section 3.A")
+    header("2024 APFA PAY SCALE   Section 3.A")
     mults = [m for _, m in CBA_DATES]
     dates = [d.strftime("%m/%d/%y") for d, _ in CBA_DATES]
 
@@ -202,11 +202,11 @@ def view_pay_scale():
     hr()
     print(c(C.DIM, "  Lineholder guarantee: 71 hrs/month  |  Reserve: 75 hrs/month"))
     print(c(C.GREEN, f"  Active rate period: {lbl_now}"))
-    input(c(C.CYAN, "\n  Jump and slide — press Enter to return to menu..."))
+    input(c(C.CYAN, "\n  Jump and slide press Enter to return to menu..."))
 
 def view_per_diem():
     clear()
-    header("PER DIEM RATES  —  Section 4.A")
+    header("PER DIEM RATES   Section 4.A")
     print(c(C.WHITE, f"  {'Effective Date':<20} {'Domestic':>10} {'International':>15}"))
     hr("─")
     today = date.today()
@@ -219,7 +219,7 @@ def view_per_diem():
     hr()
     print(c(C.CYAN, "  Per diem is TAX-FREE"))
     print(c(C.DIM,  "  Accrues from sign-in at base (1hr dom / 1hr15 intl) to 15 min after block-in"))
-    input(c(C.CYAN, "\n  Step out — press Enter to return to menu..."))
+    input(c(C.CYAN, "\n  Step out press Enter to return to menu..."))
 
 # ── Calculator ────────────────────────────────────────────
 def run_calculator():
@@ -232,7 +232,7 @@ def run_calculator():
     print(c(C.DIM,   "   Type q at any prompt to return to the main menu.\n"))
 
     # ── Step 1: Rate ──
-    print(c(C.WHITE, "  STEP 1 — YOUR PAY RATE\n"))
+    print(c(C.WHITE, "  STEP 1 YOUR PAY RATE\n"))
     # Pre-fill from session if available
     session_rate = monthly_estimate["hourly_rate"]
     if session_rate:
@@ -257,7 +257,7 @@ def run_calculator():
                 rate = val
                 print(c(C.GREEN, f"   → Using ${rate:.2f}/hr\n"))
         except ValueError:
-            print(c(C.RED, "   [!] Invalid — pulling up the pay scale"))
+            print(c(C.RED, "   [!] Invalid pulling up the pay scale"))
             raw = ""
 
     if not raw and session_rate:
@@ -284,16 +284,16 @@ def run_calculator():
         print(c(C.GREEN, f"   → ${rate:.2f}/hr  ({yr}{sfx} year @ {cba_date})\n"))
 
     # ── Step 2: Trip details ──
-    print(c(C.WHITE, "  STEP 2 — TRIP DETAILS\n"))
+    print(c(C.WHITE, "  STEP 2 TRIP DETAILS\n"))
     credit = parse_time("   Credit hours  (e.g. 18:04 or 18.07)")
     tafb   = parse_time("   TAFB hours    (e.g. 55:54 or 55.90)")
     legs   = parse_int( "   Number of legs", default=4, min_val=1)
 
     # ── Step 3: Route type ──
-    print(c(C.WHITE, "\n  STEP 3 — ROUTE TYPE\n"))
+    print(c(C.WHITE, "\n  STEP 3 ROUTE TYPE\n"))
     print("   1. Domestic")
-    print(f"   2. NIPD  (Non-Intl Premium Dest. — ${INTL_OVERRIDE['nipd']:.2f}/hr override)")
-    print(f"   3. IPD   (Intl Premium Dest. — ${INTL_OVERRIDE['ipd']:.2f}/hr override)")
+    print(f"   2. NIPD  (Non-Intl Premium Dest. ${INTL_OVERRIDE['nipd']:.2f}/hr override)")
+    print(f"   3. IPD   (Intl Premium Dest. ${INTL_OVERRIDE['ipd']:.2f}/hr override)")
     while True:
         rc = input("   Select (1–3): ").strip()
         check_quit(rc)
@@ -303,7 +303,7 @@ def run_calculator():
         print(c(C.RED, "   [!] Enter 1, 2, or 3"))
 
     # ── Step 4: Boarding ──
-    print(c(C.WHITE, "\n  STEP 4 — BOARDING PAY  (Section 3.D)\n"))
+    print(c(C.WHITE, "\n  STEP 4 BOARDING PAY  (Section 3.D)\n"))
     print(c(C.DIM, "   Current boarding times (AA flex executed, Section 11.M):"))
     print(c(C.DIM, "     IPD  (any aircraft)                        50 min"))
     print(c(C.DIM, "     NIPD (any aircraft)                        45 min"))
@@ -319,9 +319,9 @@ def run_calculator():
     else:
         print()
         print("   Aircraft type (CBA 11.M trigger is SEAT COUNT, not tail):")
-        print("     1. 161+ seats   (B737-800/MAX8, A321/A321T/XLR)  — 40 min")
-        print("     2. Widebody     (B777, B787)                     — 40 min")
-        print("     3. <161 seats   (A319/A320)                       — 35 min")
+        print("     1. 161+ seats   (B737-800/MAX8, A321/A321T/XLR)  40 min")
+        print("     2. Widebody     (B777, B787)                     40 min")
+        print("     3. <161 seats   (A319/A320)                       35 min")
         print(c(C.DIM, "   Note: every AA 737-800/MAX8 is 172-seat Oasis config → 40 min"))
         while True:
             ac = input("   Select (1–3) [1]: ").strip()
@@ -338,13 +338,13 @@ def run_calculator():
     board_min = parse_int("   Confirm or override", default=default_board, min_val=1)
 
     # ── Step 5: Extras ──
-    print(c(C.WHITE, "\n  STEP 5 — RIGS & EXTRAS  (optional)\n"))
+    print(c(C.WHITE, "\n  STEP 5 RIGS & EXTRAS  (optional)\n"))
 
-    trip_rig = parse_yes_no("   Apply trip rig?  1:3.5 TAFB — Section 11.D.4", default="n")
+    trip_rig = parse_yes_no("   Apply trip rig?  1:3.5 TAFB Section 11.D.4", default="n")
 
     sit_rig = False
     sit_excess = 0.0
-    if parse_yes_no("   Apply sit rig?  >2:30 between flights — Section 11.D.6", default="n"):
+    if parse_yes_no("   Apply sit rig?  >2:30 between flights Section 11.D.6", default="n"):
         sit_rig = True
         print(c(C.DIM, "   Enter sit time ABOVE the 2:30 threshold"))
         print(c(C.DIM, "   (e.g. if actual sit = 4:00, enter 1:30)"))
@@ -385,7 +385,7 @@ def run_calculator():
     # Every $ sign lands in the same column regardless of detail length
     AMT  = 10   # amount field width
     NAME = 16   # row name width
-    DTL  = 28   # detail width — name+detail = 44 total label chars
+    DTL  = 28   # detail width name+detail = 44 total label chars
 
     def result_line(name, detail, amount, note=""):
         note_str = c(C.DIM, f"  {note}") if note else ""
@@ -439,7 +439,7 @@ def run_calculator():
     TOTAL_LBL = NAME + DTL
     hr("─")
     print(f"  {'ESTIMATED GROSS PAY':<{TOTAL_LBL}}  {c(C.GREEN + C.BOLD, f'${total:>{AMT},.2f}')}")
-    print(c(C.CYAN, "  Per diem is tax-free — your taxable total is lower"))
+    print(c(C.CYAN, "  Per diem is tax-free your taxable total is lower"))
     hr()
     print(c(C.DIM, "  Jump and slide!"))
 
@@ -470,13 +470,13 @@ def run_calculator():
 
 def _gloss_pay_system():
     clear()
-    header("AA PAY SYSTEM  —  Section 3.O")
+    header("AA PAY SYSTEM   Section 3.O")
     rate = monthly_estimate["hourly_rate"] or get_rate(7)
     advance = round(ADVANCE_HOURS * rate, 2)
     print(f"""
   HOW AA PAYS YOU
 
-  You get two checks per month — one at the end of the
+  You get two checks per month one at the end of the
   month (the advance) and one mid-month (the balance).
   It sounds backwards because it kind of is.
 
@@ -488,7 +488,7 @@ def _gloss_pay_system():
   Why 37.5 hours? It's half the reserve guarantee
   (75 hrs). It's contractually fixed. CBA Section 3.O.2.
 
-  This check contains only the advance — no trip
+  This check contains only the advance no trip
   earnings, no per diem. Taxes and deductions apply.
 
   e.g. At 7th year rate ($60.84/hr):
@@ -499,7 +499,7 @@ def _gloss_pay_system():
   This is where all your actual trip earnings land.
   The advance from the previous month gets clawed
   back first, but this check typically comes out
-  ahead — trip earnings, boarding pay, rigs, and
+  ahead trip earnings, boarding pay, rigs, and
   per diem all stack here.
 
   Your mid-month gross:
@@ -509,26 +509,26 @@ def _gloss_pay_system():
 
   Per diem shows up as a separate non-taxable
   line item (F/A EXP - D Non-Taxable on your stub).
-  Only the per diem portion is tax-free — the rest
+  Only the per diem portion is tax-free the rest
   of your earnings are taxed normally.
 
   ── CONTRACT MONTH ───────────────────────────────────
   AA's contract month is not always a clean calendar
   month. AA publishes adjusted month dates annually
-  before vacation bids. Check your pay statement —
+  before vacation bids. Check your pay statement 
   it's listed at the top as "Contract Month."
 
   ── LIGHT MONTH? ─────────────────────────────────────
   If you flew a light month, your trip earnings might
   barely cover the advance recovery, leaving little
-  net on the 15th. That's expected — the advance
+  net on the 15th. That's expected the advance
   went out early on the 30th. The money was already
   paid, just earlier.
 
   ── PAY DATES ────────────────────────────────────────
-  30th — advance (or preceding business day if weekend)
-  15th — balance (or following business day if weekend)
-  February — advance pays on the 28th
+  30th advance (or preceding business day if weekend)
+  15th balance (or following business day if weekend)
+  February advance pays on the 28th
 
   For full details, reference CBA Section 3.O.
 """)
@@ -583,14 +583,14 @@ def _gloss_pause():
 
 def _gloss_credit():
     clear()
-    header("CREDIT HOURS  —  Section 3.A")
+    header("CREDIT HOURS   Section 3.A")
     print("""
   Credit hours are the foundation of your flight pay.
 
   The clock starts when the parking brake is released
   (chocks out) at departure and stops when the parking
   brake is set (chocks in) at arrival. This is block
-  time — not wheels up to wheels down, not door to door.
+  time not wheels up to wheels down, not door to door.
 
   Your trip paperwork (QIK/SABRE) shows credit hours
   already calculated. This is the number you enter
@@ -605,10 +605,10 @@ def _gloss_credit():
 
 def _gloss_tafb():
     clear()
-    header("TAFB — TIME AWAY FROM BASE  —  Section 4.A")
+    header("TAFB TIME AWAY FROM BASE   Section 4.A")
     print("""
   TAFB is how long you're away from your home base.
-  It's used to calculate your per diem — NOT your
+  It's used to calculate your per diem NOT your
   flight pay.
 
   The clock starts at sign-in time for your outbound
@@ -634,7 +634,7 @@ def _gloss_tafb():
 
 def _gloss_perdiem():
     clear()
-    header("PER DIEM  —  Section 4.A")
+    header("PER DIEM   Section 4.A")
     print(f"""
   Per diem is your meal and incidental expense money.
   It's paid for every hour you're away from base
@@ -646,17 +646,17 @@ def _gloss_perdiem():
 
   THE BEST PART: Per diem is largely TAX-FREE.
   It's not reported as income in most cases. Every
-  dollar of per diem is a dollar you keep — unlike
+  dollar of per diem is a dollar you keep unlike
   your flight pay which gets taxed like regular income.
 
-  CAVEAT: There are exceptions — particularly on
+  CAVEAT: There are exceptions particularly on
   single-day trips. If tax treatment of your per diem
   matters for your situation, consult a tax professional
   or reference the CBA directly.
 
   e.g. Domestic 3-day trip:
        TAFB = 56.90 hrs
-       56.90 x $2.90 = $165.01  — tax-free in most cases
+       56.90 x $2.90 = $165.01  tax-free in most cases
 
   For full details and exceptions, reference CBA Section 4.A.
 """)
@@ -664,14 +664,14 @@ def _gloss_perdiem():
 
 def _gloss_boarding():
     clear()
-    header("BOARDING PAY  —  Section 3.D")
+    header("BOARDING PAY   Section 3.D")
     print("""
   You get paid for boarding time even though it doesn't
   count as credit hours toward your flight pay.
 
   The rate is 50% of your hourly rate.
   The time used is the published scheduled boarding
-  time per leg — NOT actual boarding time.
+  time per leg NOT actual boarding time.
 
   Current published boarding times (AA flex executed):
     IPD flights (any aircraft)          50 min/leg
@@ -694,7 +694,7 @@ def _gloss_boarding():
 
 def _gloss_trip_rig():
     clear()
-    header("TRIP RIG  —  Section 11.D.4")
+    header("TRIP RIG   Section 11.D.4")
     print("""
   WHAT IS IT?
   A trip rig is a pay protection rule. It guarantees
@@ -711,7 +711,7 @@ def _gloss_trip_rig():
   Divide your TAFB by 3.5. If that number is bigger
   than your credit hours, you get paid the difference.
   If your credit hours are already higher, the rig
-  doesn't kick in — you're already above the floor.
+  doesn't kick in you're already above the floor.
 
   WORKED EXAMPLE:
   You just finished a 3-day trip. Here's what happened:
@@ -719,15 +719,15 @@ def _gloss_trip_rig():
     Credit hours:  14:22  (14.37 hrs of actual flying)
     TAFB:          61:45  (61.75 hrs away from base)
 
-  Step 1 — Calculate your rig floor:
+  Step 1 Calculate your rig floor:
     61.75 hrs TAFB ÷ 3.5 = 17.64 hrs
 
-  Step 2 — Compare to your credit hours:
+  Step 2 Compare to your credit hours:
     Rig floor:    17.64 hrs
     Credit hours: 14.37 hrs
     Difference:    3.27 hrs  ← you're under the floor
 
-  Step 3 — Get paid the difference:
+  Step 3 Get paid the difference:
     3.27 hrs x your hourly rate = trip rig pay
 
   At 7th year ($60.84/hr):
@@ -737,7 +737,7 @@ def _gloss_trip_rig():
   for the trip, which counts toward your monthly guarantee.
 
   If your credit hours had been 18+ hrs, the rig would
-  not have triggered at all — you were already above
+  not have triggered at all you were already above
   the 17.64 hr floor.
 
   CBA Reference: Section 11.D.4
@@ -746,7 +746,7 @@ def _gloss_trip_rig():
 
 def _gloss_sit_rig():
     clear()
-    header("SIT RIG  —  Section 11.D.6")
+    header("SIT RIG   Section 11.D.6")
     print("""
   WHAT IS IT?
   A sit rig pays you when you have a long stopover
@@ -763,7 +763,7 @@ def _gloss_sit_rig():
 
   HOW IT WORKS:
   Any stopover time over 2:30 earns 50% of your hourly
-  rate. The first 2:30 is not paid — only the excess.
+  rate. The first 2:30 is not paid only the excess.
 
   WORKED EXAMPLE:
   You're on a 2-day trip. Between your second and third
@@ -780,7 +780,7 @@ def _gloss_sit_rig():
 
   IMPORTANT: Sit rig does NOT add credit hours.
   It's additional pay only. Your credit hours stay
-  the same — only your paycheck goes up.
+  the same only your paycheck goes up.
 
   For full details and exceptions, reference CBA Section 11.D.6.
 """)
@@ -788,7 +788,7 @@ def _gloss_sit_rig():
 
 def _gloss_guarantee():
     clear()
-    header("MONTHLY GUARANTEES  —  Section 3.A / 11.C")
+    header("MONTHLY GUARANTEES   Section 3.A / 11.C")
     print("""
   The contract guarantees you a minimum number of
   credit hours paid each month, regardless of how
@@ -797,7 +797,7 @@ def _gloss_guarantee():
   LINEHOLDER GUARANTEE:  71 hours/month
   If your scheduled trips credit less than 71 hours,
   AA pays you as if you flew 71 hours anyway.
-  Most lineholders fly more than this — the guarantee
+  Most lineholders fly more than this the guarantee
   is a floor, not a target.
 
   RESERVE GUARANTEE:  75 hours/month
@@ -807,7 +807,7 @@ def _gloss_guarantee():
   reserve all month and never get called out.
 
   Note: These guarantees are for PAY purposes.
-  They don't affect your per diem — you only earn
+  They don't affect your per diem you only earn
   per diem for trips you actually fly.
 
   Reserve scheduling has additional rules, thresholds,
@@ -819,7 +819,7 @@ def _gloss_guarantee():
 
 def _gloss_position():
     clear()
-    header("POSITION PREMIUMS  —  Section 3.C")
+    header("POSITION PREMIUMS   Section 3.C")
     print("""
   Certain positions on a flight earn extra pay on top
   of your base hourly rate. These are paid per credit
@@ -853,7 +853,7 @@ def _gloss_position():
 
 def _gloss_intl():
     clear()
-    header("NIPD & IPD — INTERNATIONAL OVERRIDE  —  Section 3.G")
+    header("NIPD & IPD INTERNATIONAL OVERRIDE   Section 3.G")
     print(f"""
   When you fly international routes, you earn an
   additional override pay on top of your base hourly
@@ -861,11 +861,11 @@ def _gloss_intl():
 
   There are two tiers:
 
-  NIPD — Non-International Premium Destination:
+  NIPD Non-International Premium Destination:
     Routes like CUN, NAS, GDL, SJO, SJU, etc.
     Override: + $3.00/hr on every credit hour
 
-  IPD — International Premium Destination:
+  IPD International Premium Destination:
     Routes like LHR, CDG, NRT, GRU, HKG, etc.
     Override: + $3.75/hr on every credit hour
 
@@ -875,7 +875,7 @@ def _gloss_intl():
      hourly rate and is calculated on credit hours.
 
   2. Your per diem also gets the higher international
-     rate — but that's completely separate from the
+     rate but that's completely separate from the
      override. Per diem is still just TAFB x rate.
 
   So on an international trip you get:
@@ -915,8 +915,8 @@ def view_monthly_estimate():
     if not monthly_estimate["contract_start"]:
         print(c(C.DIM, "\n  Enter your contract month dates (shown on your pay statement)."))
         print(c(C.DIM, "  Example: start 06/02  end 07/01\n"))
-        monthly_estimate["contract_start"] = input("  Contract month start (MM/DD): ").strip() or "—"
-        monthly_estimate["contract_end"]   = input("  Contract month end   (MM/DD): ").strip() or "—"
+        monthly_estimate["contract_start"] = input("  Contract month start (MM/DD): ").strip() or ""
+        monthly_estimate["contract_end"]   = input("  Contract month end   (MM/DD): ").strip() or ""
 
     cs = monthly_estimate["contract_start"]
     ce = monthly_estimate["contract_end"]
@@ -944,7 +944,7 @@ def view_monthly_estimate():
         print(f"  {label}  {c(C.WHITE, f'${amount:>{AMT},.2f}')}{note_str}")
 
     n = len(monthly_estimate["trips"])
-    print(c(C.GREEN, f"\n  Contract month: {cs} — {ce}"))
+    print(c(C.GREEN, f"\n  Contract month: {cs} {ce}"))
     print(c(C.DIM,   f"  {n} trip{'s' if n != 1 else ''} entered this session\n"))
 
     hr("─")
@@ -985,12 +985,12 @@ def view_monthly_estimate():
     hr("─")
     print(c(C.WHITE, "  PROJECTED END-OF-MONTH ADVANCE  (pays ~30th)"))
     hr("─")
-    print(c(C.DIM,   "  CBA Section 3.O.2 — 37.5 hrs x your hourly rate"))
+    print(c(C.DIM,   "  CBA Section 3.O.2 37.5 hrs x your hourly rate"))
     print()
     mline("Advance Pay", f"37.5 hrs @ ${rate:.2f}", advance_gross)
     hr("─")
     print(f"  {'ESTIMATED EOM GROSS':<{TOTAL_LBL}}  {c(C.GREEN + C.BOLD, f'${advance_gross:>{AMT},.2f}')}")
-    print(c(C.DIM,   "  Taxes and deductions will reduce your net — deduction"))
+    print(c(C.DIM,   "  Taxes and deductions will reduce your net deduction"))
     print(c(C.DIM,   "  calculator coming in a future version."))
     print()
     hr()
